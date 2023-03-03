@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import uuid from "react-uuid";
 import AddItem from "./components/AddItem.js";
 import ItemsList from "./components/ItemsList.js"
@@ -6,7 +6,22 @@ import ItemsList from "./components/ItemsList.js"
 export default function Shop() {
   const [item, setItem] = useState("");
   const [discription, setDescription] = useState("");
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    if(!JSON.parse(localStorage.getItem("items"))){
+      return []
+    }
+    return JSON.parse(localStorage.getItem("items"))
+  });
+
+  useEffect(()=>{
+    localStorage.setItem("items", JSON.stringify(items))
+    if(items.length){
+      document.title = `${items.length} товаров`
+    }
+    if(!items.length){
+      document.title="Товары отсутствуют"
+    }
+  }, [items])
 
   const hendleSubmitButton = (event) => {
     if (!item || !discription) {
