@@ -13,6 +13,15 @@ export default function Shop() {
     return JSON.parse(localStorage.getItem("items"))
   });
 
+  const requestOptions  ={
+    method: "POST",
+    body: JSON.stringify({
+      name: item, 
+      desc: discription
+    }),
+    headers: {"Content-type": "application/json"}
+  }
+
   useEffect(()=>{
     localStorage.setItem("items", JSON.stringify(items))
     if(items.length){
@@ -32,6 +41,11 @@ export default function Shop() {
 
     event.preventDefault();
     setItems([...items, { id: uuid(), name: item, desc: discription }]);
+
+    fetch("https://learn.guidedao.xyz/api/student/products", requestOptions)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error(error))
 
     setDescription("");
     setItem("");
